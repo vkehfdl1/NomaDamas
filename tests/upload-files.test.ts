@@ -9,7 +9,7 @@ describe("upload command", () => {
     expect(build.exitCode).toBe(0)
   })
 
-  it("uploads an image with a message through the external upload flow", async () => {
+  it("uploads an image with a message", async () => {
     const dir = await makeTempDir("slack-shoot-upload-")
     try {
       const imagePath = join(dir, "pic.png")
@@ -25,7 +25,7 @@ describe("upload command", () => {
 
       expect(result.exitCode).toBe(0)
       expect(result.stdout).toContain("Uploaded pic.png to C123")
-      expect(result.stdout).toContain("get URL -> PUT -> complete")
+      expect(result.stdout).toContain("uploadV2")
     } finally {
       await removeDir(dir)
     }

@@ -49,7 +49,7 @@ export function createMockSlackClient(mode: string): SlackClient {
       if (mode === "upload_second_fails" && uploadIndex === 1) {
         throw new SlackError(`${filename} failed during upload`)
       }
-      return { channel, filename, order: "get URL -> PUT -> complete" }
+      return { channel, filename, order: "uploadV2" }
     }
   }
 }

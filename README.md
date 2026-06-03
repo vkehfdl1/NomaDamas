@@ -27,6 +27,7 @@ Webhook-only setup is not enough for files or media. File, image, and video uplo
 ```sh
 slack-shoot login --token xoxb-your-token
 slack-shoot sync
+slack-shoot channels
 slack-shoot config set-default slack-shoot
 slack-shoot config show
 ```
@@ -57,6 +58,7 @@ SLACK_SHOOT_LIVE_TOKEN=xoxb-your-token SLACK_SHOOT_LIVE_CHANNEL=C123 npm run qa:
 ```
 
 Troubleshooting:
+- If you need to see available channels, run `slack-shoot sync` and then `slack-shoot channels`.
 - If you see `No channel provided`, pass `--channel` or run `slack-shoot config set-default`.
 - If authentication fails, rerun `slack-shoot login --token <xoxb-token>`.
 - If media upload fails, verify the Slack app has `files:write` and the bot is in the channel.

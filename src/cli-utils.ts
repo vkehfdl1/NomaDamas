@@ -12,6 +12,7 @@ export function helpText(): string {
 Commands:
   login --token <xoxb-token>
   sync
+  channels
   config set-default <channel>
   config show
   send [message] --channel <channel> [--file <path> ...]

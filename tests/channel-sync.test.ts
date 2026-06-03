@@ -33,6 +33,44 @@ describe("channel sync and resolution", () => {
     }
   })
 
+  it("lists cached public and private channels", async () => {
+    const dir = await makeTempDir("slack-shoot-channels-")
+    try {
+      await runCli(["sync"], {
+        env: {
+          SLACK_SHOOT_CONFIG_DIR: dir,
+          SLACK_SHOOT_TOKEN: "xoxb-test",
+          SLACK_SHOOT_MOCK: "channels_ok"
+        }
+      })
+      const result = await runCli(["channels"], {
+        env: { SLACK_SHOOT_CONFIG_DIR: dir }
+      })
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain("slack-shoot\tC123\tpublic")
+      expect(result.stdout).toContain("private-shoot\tG234\tprivate")
+      expect(result.stdout).not.toContain("archived")
+    } finally {
+      await removeDir(dir)
+    }
+  })
+
+  it("explains how to populate the channel list when the cache is empty", async () => {
+    const dir = await makeTempDir("slack-shoot-channels-empty-")
+    try {
+      const result = await runCli(["channels"], {
+        env: { SLACK_SHOOT_CONFIG_DIR: dir }
+      })
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain("No cached channels")
+      expect(result.stdout).toContain("slack-shoot sync")
+    } finally {
+      await removeDir(dir)
+    }
+  })
+
   it("requires an explicit ID for duplicate channel names", async () => {
     const dir = await makeTempDir("slack-shoot-sync-dup-")
     try {

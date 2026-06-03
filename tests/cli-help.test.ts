@@ -14,6 +14,7 @@ describe("CLI help", () => {
     expect(result.exitCode).toBe(0)
     expect(result.stdout).toContain("login")
     expect(result.stdout).toContain("sync")
+    expect(result.stdout).toContain("channels")
     expect(result.stdout).toContain("config")
     expect(result.stdout).toContain("send")
     expect(result.stdout).toContain("upload")
