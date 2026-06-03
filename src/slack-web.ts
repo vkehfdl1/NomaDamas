@@ -1,8 +1,5 @@
-import { readFile } from "node:fs/promises"
 import { basename } from "node:path"
 import { WebClient, WebClientEvent } from "@slack/web-api"
-import type { FilesCompleteUploadExternalResponse } from "@slack/web-api/dist/types/response/index.js"
-import ky from "ky"
 import type { CachedChannel } from "./config.js"
 import { envValue } from "./env.js"
 import { SlackError } from "./errors.js"
@@ -79,39 +76,20 @@ async function uploadViaExternalFlow(input: {
   readonly message?: string
 }) {
   const filename = basename(input.filePath)
-  const fileData = await readFile(input.filePath)
   const client = webClient(input.token)
-  const prepared = await retryOnceOnRateLimit(async () => {
-    const response = await client.files.getUploadURLExternal({
-      filename,
-      length: fileData.byteLength
-    })
-    return {
-      uploadUrl: requiredString(response.upload_url, "Slack did not return an upload target"),
-      fileId: requiredString(response.file_id, "Slack did not return an upload target")
-    }
-  })
-
-  await ky.put(prepared.uploadUrl, {
-    body: new Blob([fileData]),
-    headers: {
-      "content-length": String(fileData.byteLength),
-      "content-type": "application/octet-stream"
-    }
-  })
-
-  const completed = await retryOnceOnRateLimit(async () => {
-    return await client.files.completeUploadExternal({
-      files: [{ id: prepared.fileId, title: filename }],
+  await retryOnceOnRateLimit(async () => {
+    await client.filesUploadV2({
       channel_id: input.channel,
+      file: input.filePath,
+      filename,
+      title: filename,
       ...(input.message === undefined ? {} : { initial_comment: input.message })
     })
   })
-
   return {
     channel: input.channel,
-    filename: uploadedFilename(completed, filename),
-    order: "get URL -> PUT -> complete"
+    filename,
+    order: "uploadV2"
   }
 }
 
@@ -143,10 +121,6 @@ async function retryOnceOnRateLimit<T>(operation: () => Promise<T>): Promise<T> 
 function maxRetryAfterMs(): number {
   const parsed = Number(envValue("SLACK_SHOOT_MAX_RETRY_AFTER_MS"))
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : defaultRetryAfterMs
-}
-
-function uploadedFilename(response: FilesCompleteUploadExternalResponse, fallback: string): string {
-  return response.files?.[0]?.name ?? response.files?.[0]?.title ?? fallback
 }
 
 function requiredString(value: string | undefined, message: string): string {
