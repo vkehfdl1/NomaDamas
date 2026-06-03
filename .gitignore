@@ -1,0 +1,7 @@
+node_modules/
+dist/
+evidence/
+.omo/
+*.tsbuildinfo
+*.tgz
+.DS_Store
