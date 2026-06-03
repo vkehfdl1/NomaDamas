@@ -93,7 +93,7 @@ async function uploadViaExternalFlow(input: {
   })
 
   await ky.put(prepared.uploadUrl, {
-    body: fileData,
+    body: new Blob([fileData]),
     headers: {
       "content-length": String(fileData.byteLength),
       "content-type": "application/octet-stream"

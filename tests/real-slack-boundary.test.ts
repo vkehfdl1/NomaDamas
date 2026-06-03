@@ -10,6 +10,7 @@ describe("real Slack boundary", () => {
     expect(source).toContain("chat.postMessage")
     expect(source).toContain("files.getUploadURLExternal")
     expect(source).toContain("files.completeUploadExternal")
+    expect(source).toContain("new Blob([fileData])")
     expect(source).toContain('from "ky"')
   })
 })
