@@ -10,5 +10,6 @@ Commands:
 - Send text with `slack-shoot send "message" --channel C123`.
 - Send media with `slack-shoot upload ./file.png --message "caption" --channel C123`.
 - Configure once with `slack-shoot login --token <xoxb-token>`, `slack-shoot sync`, and `slack-shoot config set-default <channel>`.
+- List synced channels with `slack-shoot channels`.
 
 Never print Slack tokens or raw `SLACK_SHOOT_TOKEN` values. Redact secrets in logs, evidence, and final reports.

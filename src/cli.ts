@@ -64,6 +64,18 @@ async function commandSync(): Promise<void> {
   process.stdout.write("Next: slack-shoot config set-default slack-shoot\n")
 }
 
+async function commandChannels(): Promise<void> {
+  const config = await readConfig()
+  if (config.channels.length === 0) {
+    process.stdout.write("No cached channels. Run slack-shoot sync to fetch channels visible to the bot.\n")
+    return
+  }
+  for (const channel of config.channels) {
+    const visibility = channel.isPrivate ? "private" : "public"
+    process.stdout.write(`${channel.name}\t${channel.id}\t${visibility}\n`)
+  }
+}
+
 async function commandConfig(args: readonly string[]): Promise<void> {
   const subcommand = args[0]
   if (subcommand === "set-default") {
@@ -230,6 +242,9 @@ export async function run(argv: readonly string[]): Promise<void> {
       return
     case "sync":
       await commandSync()
+      return
+    case "channels":
+      await commandChannels()
       return
     case "config":
       await commandConfig(args)
