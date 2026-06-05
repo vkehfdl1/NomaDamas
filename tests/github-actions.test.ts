@@ -13,6 +13,7 @@ describe("GitHub Actions CI/CD", () => {
     // Then: the workflow covers install, typecheck, tests, and build on supported Node versions.
     expect(workflow).toContain("pull_request:")
     expect(workflow).toContain("push:")
+    expect(workflow).toContain("actions/setup-node@v6")
     expect(workflow).toMatch(/node-version:\s*\$\{\{\s*matrix\.node-version\s*\}\}/)
     expect(workflow).toContain("npm ci")
     expect(workflow).toContain("npm run typecheck")
@@ -28,6 +29,7 @@ describe("GitHub Actions CI/CD", () => {
     // Then: publishing is bound to release publication and uses npm provenance.
     expect(workflow).toMatch(/release:\s*\n\s+types:\s*\[published\]/)
     expect(workflow).toContain("id-token: write")
+    expect(workflow).toContain("actions/setup-node@v6")
     expect(workflow).toContain("registry-url: https://registry.npmjs.org")
     expect(workflow).toContain("npm install -g npm@^11.5.1")
     expect(workflow).toContain("npm --version")
