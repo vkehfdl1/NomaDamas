@@ -7,16 +7,16 @@ export type ParsedFlags = {
 }
 
 export function helpText(): string {
-  return `slack-shoot
+  return `shoot
 
 Commands:
-  login --token <xoxb-token>
+  login [slack|discord] --token <token>
   sync
   channels
-  config set-default <channel>
+  config set-default <channel> [--provider slack|discord]
   config show
-  send [message] --channel <channel> [--file <path> ...]
-  upload <path...> [--message <text>] [--channel <channel>]
+  send [message] [--provider slack|discord] [--channel <channel>] [--file <path> ...]
+  upload <path...> [--provider slack|discord] [--message <text>] [--channel <channel>]
 `
 }
 
@@ -59,4 +59,5 @@ export async function readStdinText(): Promise<string> {
 
 function isValueFlag(value: string): boolean {
   return value === "--token" || value === "--channel" || value === "--message" || value === "--text"
+    || value === "--provider"
 }

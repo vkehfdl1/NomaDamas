@@ -12,6 +12,8 @@ describe("CLI help", () => {
     const result = await runCli(["--help"])
 
     expect(result.exitCode).toBe(0)
+    expect(result.stdout).toContain("shoot")
+    expect(result.stdout).not.toContain("slack-shoot")
     expect(result.stdout).toContain("login")
     expect(result.stdout).toContain("sync")
     expect(result.stdout).toContain("channels")

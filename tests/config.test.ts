@@ -21,7 +21,7 @@ describe("config storage", () => {
 
       expect(setResult.exitCode).toBe(0)
       expect(showResult.exitCode).toBe(0)
-      expect(showResult.stdout).toContain("Default channel: C123")
+      expect(showResult.stdout).toContain("Slack default channel: C123")
       expect(showResult.stdout).toContain("Cached channels: 0")
     } finally {
       await removeDir(dir)
@@ -53,7 +53,7 @@ describe("config storage", () => {
         env: { SLACK_SHOOT_CONFIG_DIR: dir, SLACK_SHOOT_CHANNEL: "CENV" }
       })
 
-      expect(result.stdout).toContain("Effective channel: CENV")
+      expect(result.stdout).toContain("Slack effective channel: CENV")
     } finally {
       await removeDir(dir)
     }

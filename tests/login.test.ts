@@ -19,7 +19,7 @@ describe("login command", () => {
 
       expect(login.exitCode).toBe(0)
       expect(login.stdout).toContain("Login verified")
-      expect(login.stdout).toContain("slack-shoot sync")
+      expect(login.stdout).toContain("shoot sync")
       expect(show.stdout).toContain("xoxb-REDACTED")
       expect(show.stdout).not.toContain("xoxb-test-token")
     } finally {

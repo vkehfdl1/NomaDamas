@@ -39,6 +39,25 @@ describe("CLI integration and package output", () => {
     expect(cliText.startsWith("#!/usr/bin/env node")).toBe(true)
   })
 
+  it("supports the shoot command environment names", async () => {
+    const dir = await makeTempDir("shoot-env-")
+    try {
+      const result = await runCli(["send", "rename qa"], {
+        env: {
+          SHOOT_CONFIG_DIR: dir,
+          SHOOT_TOKEN: "xoxb-test",
+          SHOOT_CHANNEL: "C123",
+          SHOOT_MOCK: "send_ok"
+        }
+      })
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain("Message sent to C123")
+    } finally {
+      await removeDir(dir)
+    }
+  })
+
   it("runs from a different current working directory", async () => {
     const dir = await makeTempDir("slack-shoot-cwd-")
     try {

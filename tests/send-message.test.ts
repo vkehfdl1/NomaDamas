@@ -29,20 +29,39 @@ describe("send command", () => {
   })
 
   it("uses stdin text and env channel", async () => {
-    const dir = await makeTempDir("slack-shoot-stdin-")
+    const dir = await makeTempDir("shoot-stdin-")
     try {
       const result = await runCli(["send"], {
         env: {
-          SLACK_SHOOT_CONFIG_DIR: dir,
-          SLACK_SHOOT_TOKEN: "xoxb-test",
-          SLACK_SHOOT_CHANNEL: "CENV",
-          SLACK_SHOOT_MOCK: "send_ok"
+          SHOOT_CONFIG_DIR: dir,
+          SHOOT_TOKEN: "xoxb-test",
+          SHOOT_CHANNEL: "CENV",
+          SHOOT_MOCK: "send_ok"
         },
         input: "hello from stdin"
       })
 
       expect(result.exitCode).toBe(0)
       expect(result.stdout).toContain("Message sent to CENV")
+    } finally {
+      await removeDir(dir)
+    }
+  })
+
+  it("keeps Slack env compatibility for existing installations", async () => {
+    const dir = await makeTempDir("shoot-slack-compat-")
+    try {
+      const result = await runCli(["send", "compat"], {
+        env: {
+          SLACK_SHOOT_CONFIG_DIR: dir,
+          SLACK_SHOOT_TOKEN: "xoxb-test",
+          SLACK_SHOOT_CHANNEL: "COLD",
+          SLACK_SHOOT_MOCK: "send_ok"
+        }
+      })
+
+      expect(result.exitCode).toBe(0)
+      expect(result.stdout).toContain("Message sent to COLD")
     } finally {
       await removeDir(dir)
     }

@@ -17,6 +17,10 @@ export class SlackError extends CliError {
   readonly name = "SlackError"
 }
 
+export class DiscordError extends CliError {
+  readonly name = "DiscordError"
+}
+
 export class FileInputError extends CliError {
   readonly name = "FileInputError"
 }

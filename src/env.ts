@@ -7,5 +7,9 @@ export function envValue(name: string): string | undefined {
 }
 
 export function envMode(): string | undefined {
-  return envValue("SLACK_SHOOT_MOCK")
+  return envValue("SHOOT_MOCK") ?? envValue("SLACK_SHOOT_MOCK")
+}
+
+export function discordEnvMode(): string | undefined {
+  return envValue("SHOOT_DISCORD_MOCK")
 }

@@ -1,8 +1,8 @@
 display_information:
-  name: slack-shoot
+  name: shoot
 features:
   bot_user:
-    display_name: slack-shoot
+    display_name: shoot
 oauth_config:
   scopes:
     bot:

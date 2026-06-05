@@ -1,6 +1,6 @@
-# slack-shoot
+# shoot
 
-`slack-shoot` is a small CLI for sending Slack messages, files, images, and videos to a specific Slack channel from any working directory.
+`shoot` is an agent-friendly CLI for sending messages and media from a shell to Slack or Discord.
 
 ## Install
 
@@ -22,31 +22,45 @@ Required bot scopes:
 
 Webhook-only setup is not enough for files or media. File, image, and video uploads require the Slack Web API.
 
+## Discord Setup
+
+Create or reuse a Discord application bot, invite it to the server with permission to post in the target channel, then use the bot token and channel ID.
+
 ## Configure
 
 ```sh
-slack-shoot login --token xoxb-your-token
-slack-shoot sync
-slack-shoot channels
-slack-shoot config set-default slack-shoot
-slack-shoot config show
+shoot login slack --token xoxb-your-token
+shoot sync
+shoot channels
+shoot config set-default C123
+shoot login discord --token your-discord-bot-token
+shoot config set-default 987654321 --provider discord
+shoot config show
 ```
 
-Config uses `SLACK_SHOOT_CONFIG_DIR` when set, otherwise the user config directory. Environment variables override disk config:
+Config uses `SHOOT_CONFIG_DIR` when set, otherwise the user config directory. Environment variables override disk config:
 
-- `SLACK_SHOOT_TOKEN`
-- `SLACK_SHOOT_CHANNEL`
-- `SLACK_SHOOT_CONFIG_DIR`
-- `SLACK_SHOOT_LIVE_TOKEN`
-- `SLACK_SHOOT_LIVE_CHANNEL`
+- `SHOOT_TOKEN`
+- `SHOOT_CHANNEL`
+- `SHOOT_CONFIG_DIR`
+- `SHOOT_MOCK`
+- `SHOOT_DISCORD_TOKEN`
+- `SHOOT_DISCORD_CHANNEL`
+- `SHOOT_DISCORD_MOCK`
+- `SHOOT_LIVE_TOKEN`
+- `SHOOT_LIVE_CHANNEL`
+
+Existing Slack-only `SLACK_SHOOT_*` env vars remain supported as compatibility fallbacks.
 
 ## Send
 
 ```sh
-slack-shoot send "hello" --channel C123
-slack-shoot send "hello using the default channel"
-slack-shoot upload ./image.png --message "image caption" --channel C123
-slack-shoot send "mixed media" --file ./image.png --file ./video.mp4 --channel C123
+shoot send "hello" --channel C123
+shoot send "hello using the default Slack channel"
+shoot upload ./image.png --message "image caption" --channel C123
+shoot send "mixed media" --file ./image.png --file ./video.mp4 --channel C123
+shoot send "hello discord" --provider discord --channel 987654321
+shoot upload ./image.png --provider discord --message "discord image" --channel 987654321
 ```
 
 ## Live QA
@@ -54,11 +68,13 @@ slack-shoot send "mixed media" --file ./image.png --file ./video.mp4 --channel C
 Live Slack QA is opt-in and redacts tokens:
 
 ```sh
-SLACK_SHOOT_LIVE_TOKEN=xoxb-your-token SLACK_SHOOT_LIVE_CHANNEL=C123 npm run qa:live
+SHOOT_LIVE_TOKEN=xoxb-your-token SHOOT_LIVE_CHANNEL=C123 npm run qa:live
 ```
 
 Troubleshooting:
-- If you need to see available channels, run `slack-shoot sync` and then `slack-shoot channels`.
-- If you see `No channel provided`, pass `--channel` or run `slack-shoot config set-default`.
-- If authentication fails, rerun `slack-shoot login --token <xoxb-token>`.
-- If media upload fails, verify the Slack app has `files:write` and the bot is in the channel.
+- If you need to see available Slack channels, run `shoot sync` and then `shoot channels`.
+- If you see `No channel provided`, pass `--channel` or run `shoot config set-default`.
+- If you see `No Discord channel provided`, pass `--channel` or run `shoot config set-default --provider discord`.
+- If authentication fails, rerun `shoot login slack --token <xoxb-token>` or `shoot login discord --token <bot-token>`.
+- If Slack media upload fails, verify the Slack app has `files:write` and the bot is in the channel.
+- If Discord posting fails, verify the bot is invited and can post in the target channel.

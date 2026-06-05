@@ -1,10 +1,10 @@
 {
-  "name": "slack-shoot",
+  "name": "shoot",
   "version": "0.1.0",
   "type": "module",
   "private": true,
   "bin": {
-    "slack-shoot": "dist/cli.js"
+    "shoot": "dist/cli.js"
   },
   "files": [
     "dist",

@@ -20,7 +20,7 @@ describe("live Slack QA harness", () => {
     })
 
     expect(result.exitCode).not.toBe(0)
-    expect(result.stderr).toContain("SLACK_SHOOT_LIVE_CHANNEL")
+    expect(result.stderr).toContain("SHOOT_LIVE_CHANNEL")
     expect(result.stderr).not.toContain("xoxb-test")
   })
 })

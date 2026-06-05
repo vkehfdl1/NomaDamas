@@ -15,6 +15,8 @@ const ChannelSchema = z.object({
 const ConfigSchema = z.object({
   token: z.string().optional(),
   defaultChannel: z.string().optional(),
+  discordToken: z.string().optional(),
+  discordDefaultChannel: z.string().optional(),
   channels: z.array(ChannelSchema).default([]),
   syncedAt: z.string().optional()
 })
@@ -28,13 +30,13 @@ export type ConfigPaths = {
 }
 
 export function configPaths(): ConfigPaths {
-  const override = envValue("SLACK_SHOOT_CONFIG_DIR")
+  const override = envValue("SHOOT_CONFIG_DIR") ?? envValue("SLACK_SHOOT_CONFIG_DIR")
   if (override !== undefined) {
     return { dir: override, file: join(override, "config.json") }
   }
   const xdg = envValue("XDG_CONFIG_HOME")
   const base = xdg ?? join(homedir(), ".config")
-  const dir = join(base, "slack-shoot")
+  const dir = join(base, "shoot")
   return { dir, file: join(dir, "config.json") }
 }
 
@@ -67,11 +69,19 @@ export async function writeConfig(config: AppConfig): Promise<void> {
 }
 
 export function effectiveToken(config: AppConfig): string | undefined {
-  return envValue("SLACK_SHOOT_TOKEN") ?? config.token
+  return envValue("SHOOT_TOKEN") ?? envValue("SLACK_SHOOT_TOKEN") ?? config.token
 }
 
 export function effectiveChannel(config: AppConfig, explicit?: string): string | undefined {
-  return explicit ?? envValue("SLACK_SHOOT_CHANNEL") ?? config.defaultChannel
+  return explicit ?? envValue("SHOOT_CHANNEL") ?? envValue("SLACK_SHOOT_CHANNEL") ?? config.defaultChannel
+}
+
+export function effectiveDiscordToken(config: AppConfig): string | undefined {
+  return envValue("SHOOT_DISCORD_TOKEN") ?? config.discordToken
+}
+
+export function effectiveDiscordChannel(config: AppConfig, explicit?: string): string | undefined {
+  return explicit ?? envValue("SHOOT_DISCORD_CHANNEL") ?? config.discordDefaultChannel
 }
 
 export function redactToken(token: string | undefined): string {

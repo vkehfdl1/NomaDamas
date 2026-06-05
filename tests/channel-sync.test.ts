@@ -27,7 +27,7 @@ describe("channel sync and resolution", () => {
       expect(sync.exitCode).toBe(0)
       expect(sync.stdout).toContain("Cached 2 channels")
       expect(setDefault.exitCode).toBe(0)
-      expect(show.stdout).toContain("Default channel: slack-shoot")
+      expect(show.stdout).toContain("Slack default channel: slack-shoot")
     } finally {
       await removeDir(dir)
     }
@@ -65,7 +65,7 @@ describe("channel sync and resolution", () => {
 
       expect(result.exitCode).toBe(0)
       expect(result.stdout).toContain("No cached channels")
-      expect(result.stdout).toContain("slack-shoot sync")
+      expect(result.stdout).toContain("shoot sync")
     } finally {
       await removeDir(dir)
     }
