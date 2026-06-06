@@ -1,16 +1,13 @@
 {
-  "name": "@vkehfdl1/shoot",
+  "name": "shoot",
   "version": "0.1.0",
-  "description": "CLI for sending Slack and Discord messages and media.",
   "type": "module",
-  "private": false,
+  "private": true,
   "bin": {
     "shoot": "dist/cli.js"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "dist/**/*.map",
+    "dist",
     "README.md",
     "AGENTS.md",
     "docs",
@@ -18,13 +15,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/fix-cli-mode.mjs",
-    "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "qa:live": "node scripts/qa-live.mjs"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
